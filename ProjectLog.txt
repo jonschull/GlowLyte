@@ -43,7 +43,8 @@ Log
       (like "PPGSOincrementallayout.html")
 
     now struggling to create new repo realstuff
+    perhaps I'm good now?
 
 
 Other Notes:  Keep these true
-  Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro .
+  Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro
