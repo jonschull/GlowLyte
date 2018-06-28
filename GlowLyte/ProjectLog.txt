@@ -42,7 +42,13 @@ Log
     Fetch in glitch was choking on long-named python files
       (like "PPGSOincrementallayout.html")
 
-    now struggling to create new repo realstuff
+    These commands finally allowed me to establish a connections to a new github repostiory (GlowLyte)
+            git init .
+      554  git remote add origin https://github.com/jonschull/GlowLyte.git
+      555  git status
+      556  atom .
+      557  git pull
+      558  git pull https://github.com/jonschull/GlowLyte master
 
 
 Other Notes:  Keep these true
