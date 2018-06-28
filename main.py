@@ -54,7 +54,6 @@ for edge in edges:
     spheres[s].kids += 1
 
 
-
 #sphere volume proportional to descendants
 def cube_root(num):
     return num ** (1. / 3)
@@ -68,7 +67,7 @@ def updateSpheres(nodes):
         spheres[k].radius = getRadius(spheres[k].kids)
         labels[k].pos  = spheres[k].pos
 
-def updateSpheresAndCones(nodes):
+def update(nodes, edges):
      updateSpheres(nodes)
      for eID in oKeys(cones):
          s,t = eID.split('.')
@@ -77,11 +76,10 @@ def updateSpheresAndCones(nodes):
          cones[eID].radius= spheres[s].radius
 
 
-
 # Generate nodes
 params={'edges':edges,
         'iterations'    : 300,
-        'updateNodes'   : updateSpheresAndCones,
+        'update'        : update,
         'is_3D'         : False,
         'force_strength': 5.0,
         'dampening'     : 0.01,

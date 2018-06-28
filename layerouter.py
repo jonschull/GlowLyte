@@ -39,17 +39,18 @@ def combinations( iter='ABCD', len=2 ):  # ONLY works for len=2!
 
 
 def run(params):
+    global nodes, edges
+
     edges =         params['edges']
     iterations =    params['iterations']
-    updateNodes=    params['updateNodes']
+    update=         params['update']
     is_3D =         params['is_3D']
     dampening =     params['dampening']
     force_strength= params['force_strength']
     max_velocity  = params['max_velocity']
     max_distance  = params['max_distance']
 
-    global nodes
-
+ 
     """Runs a force-directed-layout algorithm on the input graph.
 
     iterations - Number of FDL iterations to run in coordinate generation
@@ -95,9 +96,9 @@ def run(params):
             if not is_3D:
                 node['velocity'][2]=0.0
 
-        if updateNodes:
+        if update:
             scene.waitfor("redraw")
-            updateNodes(nodes)
+            update(nodes,edges)
 
     # Clean and return at end
     for node in oValues(nodes):
