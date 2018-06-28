@@ -98,7 +98,7 @@ def run(params):
 
         if update:
             scene.waitfor("redraw")
-            update(nodes,edges)
+            update(nodes)
 
     # Clean and return at end
     for node in oValues(nodes):

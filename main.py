@@ -17,7 +17,7 @@ def getIDs(edges):
 
 IDs = getIDs(edgeInts) #IDs are strings: '2'
 
-showLabels=False
+showLabels=True
 niceColor=color.orange
 
 V=vector
@@ -35,12 +35,12 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
  
-
+ 
 #make spheres and labels
 for ID in IDs:
     spheres[ID] = sphere(color=randVec())
     spheres[ID].kids = 0
-    labels[ID]  = label(text=ID, visible=showLabels)
+    spheres[ID].label = label(text=ID, visible=showLabels)
 
 def edgeUtil(edge): #eID for '1' -> '2' is '1.2'
     s,t = edge['source'], edge['target']
@@ -65,15 +65,18 @@ def updateSpheres(nodes):
         x,y,z = v['velocity']
         spheres[k].pos = vector(x,y,z)
         spheres[k].radius = getRadius(spheres[k].kids)
-        labels[k].pos  = spheres[k].pos
+        spheres[k].label.pos  = spheres[k].pos
 
-def update(nodes, edges):
-     updateSpheres(nodes)
-     for eID in oKeys(cones):
-         s,t = eID.split('.')
-         cones[eID].pos = spheres[s].pos
-         cones[eID].axis= spheres[t].pos - spheres[s].pos
-         cones[eID].radius= spheres[s].radius
+n=1
+def update(nodes):
+    global n
+    updateSpheres(nodes)
+    ###edges.append({'source':'5','target':str(n))
+    for eID in oKeys(cones):
+        s,t = eID.split('.')
+        cones[eID].pos = spheres[s].pos
+        cones[eID].axis= spheres[t].pos - spheres[s].pos
+        cones[eID].radius= spheres[s].radius
 
 
 # Generate nodes
