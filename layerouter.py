@@ -167,7 +167,6 @@ if __name__ == '__xxmain__':
             IDs.append(str(t[1]))
         return set(IDs)
 
-
     edges=[(1,2),(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6)]
 
     spheres={}

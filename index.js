@@ -20,7 +20,7 @@ from utils import filterImports
 //pyFiles defined here are turned into GlowScript source.  Then executed by runCode.
 async function forGlowScript(){
   source=''
-  source += await getSource('cone.py')
+  source += await getSource('box.py')
   source += await getSource('layerouter.py')
-  source += await getSource('main.py') 
+  source += await getSource('main.py')
 }
