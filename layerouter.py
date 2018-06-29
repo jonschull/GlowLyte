@@ -37,71 +37,6 @@ def combinations( iter='ABCD', len=2 ):  # ONLY works for len=2!
                         combos.append( (i, j) )
     return combos
 
-
-def run(params):
-    """Runs a force-directed-layout algorithm on the input graph.
-
-    iterations - Number of FDL iterations to run in coordinate generation
-    force_strength - Strength of Coulomb and Hooke forces
-                     (edit this to scale the distance between nodes)
-    dampening - Multiplier to reduce force applied to nodes
-    max_velocity - Maximum distance a node can move in one step
-    max_distance - The maximum distance considered for interactions
-    """
-
-    global nodes, edges
-
-    edgeIDs =       params['edgeIDs']
-    iterations =    params['iterations']
-    update=         params['update']
-    is_3D =         params['is_3D']
-    dampening =     params['dampening']
-    force_strength= params['force_strength']
-    max_velocity  = params['max_velocity']
-    max_distance  = params['max_distance']
- 
-    nodeIDs = list(set('.'.join(edgeIDs).split('.')))
-
-    d = 3 if is_3D else 2
-
-    nodes={}
-    for ID in nodeIDs:
-        nodes[ID]={'velocity': [0.0, 0.0, 0.0], 'force': [0.0, 0.0, 0.0]}  #changed JS
-
-    for i in range(iterations):
-        # Add in Coulomb-esque node-node repulsive forces
-        for node1, node2 in combinations( oValues(nodes), 2):
-            _coulomb(node1, node2, force_strength, max_distance)
-
-         # And Hooke-esque edge spring forces
-        for edge in edgeIDs:
-            s,t = edge.split('.')  #s, t = source, target
-            _hooke(nodes[s], nodes[t],
-                   force_strength , max_distance)
-
-        for key, node in oItems(nodes):
-            force = [_constrain(dampening * f, -max_velocity, max_velocity)
-                     for f in node['force']]
-            node['velocity'] = [v + dv for v, dv in zip(node['velocity'], force)]
-            node['force'] = [0.0, 0.0, 0.0]
-            if not is_3D:
-                node['velocity'][2]=0.0
-
-        if update:
-            scene.waitfor("redraw")
-            update(nodes) #this goes 
-
-    # Clean and return at end
-    for node in oValues(nodes):
-        del node['force']
-        node['location'] = node['velocity']
-        del node['velocity']
-        # Even if it's 2D, let's specify three dimensions
-        if not is_3D:
-            node['location'].append(0.0)
-    return nodes
-
-
 def _coulomb(n1, n2, k, r):
     """Calculates Coulomb forces and updates node data."""
     # Get relevant positional data
@@ -142,6 +77,58 @@ def _hooke(n1, n2, k, r):  #k and r are undefined!!!!
 def _constrain(value, min_value, max_value):
     """Constrains a value to the inputted range."""
     return max(min_value, min(value, max_value))
+
+
+def run(nodes, params):
+    """Runs a force-directed-layout algorithm on the input graph.
+    iterations - Number of FDL iterations to run in coordinate generation
+    force_strength - Strength of Coulomb and Hooke forces
+                     (edit this to scale the distance between nodes)
+    dampening - Multiplier to reduce force applied to nodes
+    max_velocity - Maximum distance a node can move in one step
+    max_distance - The maximum distance considered for interactions
+    """
+    edgeIDs =       params['edgeIDs']
+    iterations =    params['iterations']
+    update=         params['update']
+    is_3D =         params['is_3D']
+    dampening =     params['dampening']
+    force_strength= params['force_strength']
+    max_velocity  = params['max_velocity']
+    max_distance  = params['max_distance']
+ 
+    nodeIDs = list(set('.'.join(edgeIDs).split('.')))
+
+    d = 3 if is_3D else 2
+    if len(nodes)==0:
+        for ID in nodeIDs:
+            nodes[ID]={'velocity': [0.0, 0.0, 0.0], 'force': [0.0, 0.0, 0.0]}  #changed JS
+
+    for i in range(iterations):
+        # Add in Coulomb-esque node-node repulsive forces
+        for node1, node2 in combinations( oValues(nodes), 2):
+            _coulomb(node1, node2, force_strength, max_distance)
+
+         # And Hooke-esque edge spring forces
+        for edge in edgeIDs:
+            s,t = edge.split('.')  #s, t = source, target
+            _hooke(nodes[s], nodes[t],
+                   force_strength , max_distance)
+
+        for key, node in oItems(nodes):
+            force = [_constrain(dampening * f, -max_velocity, max_velocity)
+                     for f in node['force']]
+            node['velocity'] = [v + dv for v, dv in zip(node['velocity'], force)]
+            node['force'] = [0.0, 0.0, 0.0]
+            if not is_3D:
+                node['velocity'][2]=0.0
+
+        if update:
+            scene.waitfor("redraw")
+            update(nodes) #this goes 
+
+    return nodes
+
 
 def showNodes(nodes): #this is a proxy for updating
     for k, node in oItems(nodes):

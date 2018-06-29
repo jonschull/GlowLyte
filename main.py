@@ -71,10 +71,9 @@ def update(nodes): #function passed in to run(params)
         cones[eID].axis= spheres[t].pos - spheres[s].pos
         cones[eID].radius= spheres[s].radius
 
-
 # Generate nodes
 params={'edgeIDs': edgeIDs,
-        'iterations'    : 200,
+        'iterations'    : 40,
         'update'        : update,
         'is_3D'         : False,
         'force_strength': 5.0,
@@ -82,5 +81,8 @@ params={'edgeIDs': edgeIDs,
         'max_velocity'  : 2.0,
         'max_distance'  : 50}
 
-
-nodes = run(params)
+nodes={}
+nodes = run(nodes, params)
+for i in range(5):
+    print('round ', i)
+    run(nodes, params)  

@@ -20,12 +20,10 @@ Log
         then Push
 
     installed Terminal (right click or see icon at bottom left)
-
   June 24
     installed pythonIDE
     pyInstall and lyte no longer choke on purePython files that import pythonize
     Changed Themes via settings
-
   June 25 separation of concerns (but confusing flow.  need to diagram and refactor)
     expt.html is all generic
     notyet.js contains the specific inclusions of python runCode
@@ -37,14 +35,23 @@ Log
       uses notyet.js/notyet()
         to getSource and filterImports to populate the GSO editor
         and then asks GlowScript to runCode()
-
   June 26.  glitch-compatible index.html created for PPGSO
     Fetch in glitch was choking on long-named python files
       (like "PPGSOincrementallayout.html")
 
     now struggling to create new repo realstuff
     perhaps I'm good now?
+  June 28   lean mean, and incremental.
+          now I should be able to do newChild = birth(parentID)
+          have birth update params[edgeIDs] and nodes
+          and run(nodes, params) again and again
+
 
 
 Other Notes:  Keep these true
   Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro
+
+  Notes for Bruce
+    this tableau
+      https://cl.ly/2T0Z3y122B0a/Screen%20Recording%202018-06-28%20at%2010.17%20PM.gif
+    it would be nice if vpython re-used the browser-window  last used instead of opening a new window
