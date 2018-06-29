@@ -54,4 +54,10 @@ Other Notes:  Keep these true
   Notes for Bruce
     this tableau
       https://cl.ly/2T0Z3y122B0a/Screen%20Recording%202018-06-28%20at%2010.17%20PM.gif
+      shows I have
+        git and live serving via Atom
+        clickable python debugging via Thonny (with variables visible in shell)
+        one source file, with two browsers activated in parallel
     it would be nice if vpython re-used the browser-window  last used instead of opening a new window
+
+    incidentally vpython3 doesn't work inside hydrogen

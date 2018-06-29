@@ -8,8 +8,7 @@ nodeIDs = list(set('.'.join(edgeIDs).split('.')))           #nIds  ['8', '7', '3
 cones={}
 spheres={}
 labels={}
-showLabels=True 
-
+showLabels=False 
 
 ####color utils
 V=vector
@@ -27,17 +26,18 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
 
-
 def newSphere(ID):
     spheres[ID] = sphere(color=randVec())
     spheres[ID].kidIDs = []
     spheres[ID].label = label(text=ID, visible=showLabels)
+    return spheres[ID]
 
 def newCone(eID):
     s,t = eID.split('.')
     cones[eID]= cone(pos=spheres[s].pos, axis=spheres[s].pos - spheres[t].pos)
     cones[eID].color = upTune(spheres[s].color + spheres[t].color)
     spheres[s].kidIDs.append(eID.split('.')[1])
+    return cones[eID]
 
 #make spheres and labels
 for ID in nodeIDs:
@@ -59,7 +59,7 @@ def updateSpheres(nodes):
     for k,v in oItems(nodes):
         x,y,z = v['velocity']
         spheres[k].pos = vector(x,y,z)
-        spheres[k].radius = getRadius(spheres[k])
+        spheres[k].radius = getRadius(spheres[k]) *1.5
         spheres[k].label.pos  = spheres[k].pos
 
 def update(nodes): #function passed in to run(params)
@@ -81,8 +81,27 @@ params={'edgeIDs': edgeIDs,
         'max_velocity'  : 2.0,
         'max_distance'  : 50}
 
+def giveBirth(eID): 
+    s,t = eID.split('.')
+    edgeInts.append((int(s), int(t)))
+    nodeIDs.append(t)
+    edgeIDs.append(eID)
+    params['edgeIDs'] = edgeIDs
+    kid = newSphere(t)
+    kid.pos = spheres[s].pos
+    newCone(eID)
+    nodes[t] ={}
+    nodes[t]['velocity'] = nodes[s]['velocity']
+    nodes[t]['force']    = nodes[s]['force']
+
 nodes={}
 nodes = run(nodes, params)
 for i in range(5):
     print('round ', i)
+    if i==2:
+        print(edgeIDs)
+        giveBirth('12.13')
+        giveBirth('12.14')
+ 
+        print(edgeIDs)
     run(nodes, params)  
