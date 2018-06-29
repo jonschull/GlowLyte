@@ -1,15 +1,9 @@
 from vpython import *
 from layerouter import *
 
-edgeInts=[(1,2),(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6)]
-edgeIDs = [(  str(t[0])+'.'+ str(t[1]) ) for t in edgeInts]
-nodeIDs = list(set('.'.join(edgeIDs).split('.')))
-##print('eints', edgeInts )
-##print('eids ', edgeIDs )
-##print('nIds ', nodeIDs)
-
-edges = [{'source' : str(s), 'target' : str(t)} for s, t in edgeInts]
-#this is what layerouter needs.  remove this
+edgeInts=[(1,2),(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6),(9,10),(9,11),(9,12)]
+edgeIDs = [(  str(t[0])+'.'+ str(t[1]) ) for t in edgeInts] #eids  ['1.2', '2.3', '3.1'...
+nodeIDs = list(set('.'.join(edgeIDs).split('.')))           #nIds  ['8', '7', '3',
 
 cones={}
 spheres={}
@@ -33,7 +27,7 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
 
-### 
+
 def newSphere(ID):
     spheres[ID] = sphere(color=randVec())
     spheres[ID].kidIDs = []
@@ -52,7 +46,6 @@ for ID in nodeIDs:
 #make cones after spheres exist
 for eID in edgeIDs:
     newCone(eID)
-
 
 #sphere volume proportional to descendants
 def cube_root(num):
@@ -80,8 +73,7 @@ def update(nodes): #function passed in to run(params)
 
 
 # Generate nodes
-params={'edges':edges,
-        'edgeIDs': edgeIDs,
+params={'edgeIDs': edgeIDs,
         'iterations'    : 200,
         'update'        : update,
         'is_3D'         : False,
