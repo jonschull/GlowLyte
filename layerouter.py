@@ -42,6 +42,7 @@ def run(params):
     global nodes, edges
 
     edges =         params['edges']
+    edgeIDs =       params['edgeIDs']
     iterations =    params['iterations']
     update=         params['update']
     is_3D =         params['is_3D']
@@ -61,13 +62,15 @@ def run(params):
     max_distance - The maximum distance considered for interactions
     """
 
-    nodeIDs = IDsFromEdges(edges)
+    #nodeIDs = IDsFromEdges(edges) #to be removed
+    nodeIDs = list(set('.'.join(edgeIDs).split('.')))
 
-    #fix edge.size to eliminate #get below
-    for i, edge in enumerate(edges):
-        if not ('size' in oKeys(edge)):  #(parens around boolean mandatory in RS)
-            edges[i]['size']=1
-    # Convert to a data-storing object and initialize size
+    
+##    #fix edge.size to eliminate #get below
+##    for i, edge in enumerate(edges):
+##        if not ('size' in oKeys(edge)):  #(parens around boolean mandatory in RS)
+##            edges[i]['size']=1
+##    # Convert to a data-storing object and initialize size
     d = 3 if is_3D else 2
 
     newDict={}
@@ -84,7 +87,9 @@ def run(params):
          # And Hooke-esque edge spring forces
         for edge in edges:
             _hooke(nodes[edge['source']], nodes[edge['target']],
-                   force_strength * edge['size'], max_distance)
+                   force_strength , max_distance)
+##                   force_strength * edge['size'], max_distance)
+            
                    #force_strength * edge.get('size', 1), max_distance)
 
         for key, node in oItems(nodes):
