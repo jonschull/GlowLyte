@@ -8,7 +8,7 @@ nodeIDs = list(set('.'.join(edgeIDs).split('.')))           #nIds  ['8', '7', '3
 cones={}
 spheres={}
 labels={}
-showLabels=False 
+labelsVisible=False
 
 ####color utils
 V=vector
@@ -26,16 +26,21 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
 
-def newSphere(ID):
-    spheres[ID] = sphere(color=randVec())
+def newSphere(ID, parent=''):
+    if not parent:
+        color = randVec()
+    else:
+        color = similar(spheres[parent].color)
+    spheres[ID] = sphere(color=color)
     spheres[ID].kidIDs = []
-    spheres[ID].label = label(text=ID, visible=showLabels)
+    spheres[ID].label = label(text=ID, visible=labelsVisible)
     return spheres[ID]
 
 def newCone(eID):
     s,t = eID.split('.')
-    cones[eID]= cone(pos=spheres[s].pos, axis=spheres[s].pos - spheres[t].pos)
-    cones[eID].color = upTune(spheres[s].color + spheres[t].color)
+    cones[eID]= cone(pos=spheres[s].pos)
+    cones[eID].axis=spheres[s].pos - spheres[t].pos
+    cones[eID].color = spheres[s].color
     spheres[s].kidIDs.append(eID.split('.')[1])
     return cones[eID]
 
@@ -87,21 +92,25 @@ def giveBirth(eID):
     nodeIDs.append(t)
     edgeIDs.append(eID)
     params['edgeIDs'] = edgeIDs
-    kid = newSphere(t)
+    kid = newSphere(t,s)
     kid.pos = spheres[s].pos
-    newCone(eID)
+    newCone(eID) 
     nodes[t] ={}
     nodes[t]['velocity'] = nodes[s]['velocity']
     nodes[t]['force']    = nodes[s]['force']
 
+
 nodes={}
 nodes = run(nodes, params)
-for i in range(5):
-    print('round ', i)
+for i in range(20):
     if i==2:
-        print(edgeIDs)
         giveBirth('12.13')
         giveBirth('12.14')
- 
-        print(edgeIDs)
+        giveBirth('12.15')
+        giveBirth('12.16')
+        giveBirth('16.17')
+        giveBirth('17.18')
+        giveBirth('18.19')
+        giveBirth('19.20')
+
     run(nodes, params)  
