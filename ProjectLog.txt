@@ -46,6 +46,8 @@ Log
           have birth update params[edgeIDs] and nodes
           and run(nodes, params) again and again
 
+  June 20
+
 
 Other Notes:  Keep these true
   Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro
@@ -57,6 +59,7 @@ Other Notes:  Keep these true
         git and live serving via Atom
         clickable python debugging via Thonny (with variables visible in shell)
         one source file, with two browsers activated in parallel
-    it would be nice if vpython re-used the browser-window  last used instead of opening a new window
 
-    incidentally vpython3 doesn't work inside hydrogen
+    it would be nice if vpython re-used the browser-window last used, instead of opening a new window
+
+    vpython doesn't work inside hydrogen

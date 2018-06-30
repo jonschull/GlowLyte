@@ -133,3 +133,25 @@ def run(nodes, params):
 def showNodes(nodes): #this is a proxy for updating
     for k, node in oItems(nodes):
         print(k, node['velocity']) #actually x,y,z
+    print()
+
+if __name__== '__main__':
+    
+        nodes={}
+    
+        params={'edgeIDs': ['1.2','2.3', '3.4'],
+            'iterations'    : 3,
+            'update'        : showNodes,
+            'is_3D'         : False,
+            'force_strength': 5.0,
+            'dampening'     : 0.01,
+            'max_velocity'  : 2.0,
+            'max_distance'  : 50}
+
+        run(nodes, params)
+        
+        print(nodes) #velocity is actual position xyz
+        
+        run(nodes, params) 
+        
+        print(nodes)
