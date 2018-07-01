@@ -87,6 +87,9 @@ def run(nodes, params):
     dampening - Multiplier to reduce force applied to nodes
     max_velocity - Maximum distance a node can move in one step
     max_distance - The maximum distance considered for interactions
+    
+    nodes preserves state (velocity and force)
+    edgeIDs define links ('12.13')  = (source.target)
     """
     edgeIDs =       params['edgeIDs']
     iterations =    params['iterations']
@@ -95,14 +98,17 @@ def run(nodes, params):
     dampening =     params['dampening']
     force_strength= params['force_strength']
     max_velocity  = params['max_velocity']
-    max_distance  = params['max_distance']
+    max_distance  = params['max_distance'] 
  
-    nodeIDs = list(set('.'.join(edgeIDs).split('.')))
-
+    graphString = ' '.join(edgeIDs)
+    nodeIDs = str.replace(graphString, ':', ' ').split(' ')
+ 
+ 
     d = 3 if is_3D else 2
-    if len(nodes)==0:
+    
+    if len(nodes)==0:  #special case.  Otherwise, you must build nodes.
         for ID in nodeIDs:
-            nodes[ID]={'velocity': [0.0, 0.0, 0.0], 'force': [0.0, 0.0, 0.0]}  #changed JS
+            nodes[ID]={'velocity': [0.0, 0.0, 0.0], 'force': [0.0, 0.0, 0.0]}  
 
     for i in range(iterations):
         # Add in Coulomb-esque node-node repulsive forces
@@ -111,7 +117,7 @@ def run(nodes, params):
 
          # And Hooke-esque edge spring forces
         for edge in edgeIDs:
-            s,t = edge.split('.')  #s, t = source, target
+            s,t = edge.split(':')  #s, t = source, target
             _hooke(nodes[s], nodes[t],
                    force_strength , max_distance)
 
@@ -130,8 +136,9 @@ def run(nodes, params):
     return nodes
 
 def showNodes(nodes): #this is a proxy for updating
+    print('\n showNodes:')
     for k, node in oItems(nodes):
-        print(k, node['velocity']) #actually x,y,z
+        print(k, node) #actually x,y,z
     print()
 
 if __name__== '__xxmain__': #useful for testing

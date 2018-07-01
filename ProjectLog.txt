@@ -57,6 +57,18 @@ Other Notes:  Keep these true
   GlowLyte anomalies
     if __name__=='__main__' is always true because my import simply amalgamates
 
+  RapydScript anomalies
+    replace
+          'abab'.replace('a','x') => 'xbab' in RS, xbxb in python
+      str('abab'.replace,'a','x') => 'xbxb' in both
+      this was not fixed by strings('replace')
+
+    split
+      'a b c'.split() => 'a b c' [unchanged] in RS
+      'a b c'.split(' ') => ['a', 'b', 'c'] in both.  HOWEVER
+        in RS it's an array
+        in python it's a list
+
 
   Notes for Bruce
     this tableau

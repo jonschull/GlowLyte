@@ -2,11 +2,13 @@ from vpython import *
 from layerouter import *
 
 V=vector
-    
+
 cones={}
 spheres={}
 labels={}
 labelsVisible=1
+nodes={}
+
 
 def randShift():
     return V(random()-0.5, random()-0.5, 0)
@@ -14,7 +16,7 @@ def randShift():
 def randVec():
     return V(random(),random(), random())
 
-def upTune(v): #lighten color so one component =1 
+def upTune(v): #lighten color so one component =1
     m = max(v.x,v.y,v.z)
     v= v*1/m
     return v
@@ -33,18 +35,18 @@ def newSphere(ID, parent=''):
     return spheres[ID]
 
 def newCone(eID):
-    s,t = eID.split('.')
+    s,t = eID.split(':')
     cones[eID]= cone(pos=spheres[s].pos)
     cones[eID].axis=spheres[t].pos - spheres[s].pos
     cones[eID].color = spheres[s].color
-    spheres[s].kidIDs.append(eID.split('.')[1])
+    spheres[s].kidIDs.append(eID.split(':')[1])
     return cones[eID]
 
 #sphere volume proportional to descendants
 def cube_root(num):
     return num ** (1. / 3)
 
-def getRadius(sphere): 
+def getRadius(sphere):
     volume = len(sphere.kidIDs)
     return cube_root( ((1+volume) / pi)  * (3./ 4) )
 
@@ -59,28 +61,27 @@ def update(nodes): #function passed in to run(params)
     global n
     updateSpheres(nodes)
     for eID in oKeys(cones):
-        s,t = eID.split('.')
+        s,t = eID.split(':')
         cones[eID].pos = spheres[s].pos
         cones[eID].axis= spheres[t].pos - spheres[s].pos
         cones[eID].radius= spheres[s].radius
 
-def giveBirth(eID): 
-    s,t = eID.split('.')
-    edgeInts.append((int(s), int(t)))
+def giveBirth(eID):
+    s,t = eID.split(':') 
     nodeIDs.append(t)
+    print('edgeIDs', edgeIDs)
+    
+    print('type edgeIDs', type(edgeIDs))
     edgeIDs.append(eID)
+    print('edgeIDs')
     params['edgeIDs'] = edgeIDs
     kid = newSphere(t,s)
     kid.pos = spheres[s].pos
-    newCone(eID) 
+    newCone(eID)
     nodes[t] ={}
     nodes[t]['velocity'] = nodes[s]['velocity']
     nodes[t]['force']    = nodes[s]['force']
 
-def getIDs(edgeInts=[]):
-    edgeIDs = [(  str(t[0])+'.'+ str(t[1]) ) for t in edgeInts] # ['1.2', '2.3', '3.1'...
-    nodeIDs = list(set('.'.join(edgeIDs).split('.')))           # ['8', '7', '3'...
-    return edgeIDs, nodeIDs
 
 def showLabels():
     for sphere in oValues(spheres):
@@ -91,9 +92,10 @@ def hideLabels():
 
 
 if __name__== '__main__':
-    edgeInts=[(0,1),(1,2)]#,(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6),(9,10),(9,11),(9,12)]
-    edgeIDs, nodeIDs = getIDs(edgeInts)
-
+    graphString = '0:1 1:2 2:3 3:4 4:0 4:5 4:6 4:7 7:8 8:9 9:10 10:11' 
+    edgeIDs = list(graphString.split(' '))  #' ' needed for RapydScript; list needed lest we get an array
+    nodeIDs = list(set(str.replace(graphString, ':', ' ').split(' '))) # '0 1 2 3 4'.split(' ')
+    ########   graphstring.replace won't work.        RapydScript quirk
     
     #make spheres and labels
     for ID in nodeIDs:
@@ -104,8 +106,8 @@ if __name__== '__main__':
         newCone(eID)
 
     # Generate nodes
-    params={'edgeIDs': edgeIDs, 
-            'iterations'    : 150,
+    params={'edgeIDs': edgeIDs,
+            'iterations'    : 50,
             'update'        : update,
             'is_3D'         : False,
             'force_strength': 5.0,
@@ -113,9 +115,7 @@ if __name__== '__main__':
             'max_velocity'  : 2.0,
             'max_distance'  : 50}
 
-    nodes={}
-    run(nodes, params)
-    for i in range(2):
-            giveBirth(str(i) + '.' + str(i+1))
-            run(nodes, params)
+    nodes = run(nodes, params)
+    giveBirth('1:13')
+    nodes = run(nodes, params)
 
