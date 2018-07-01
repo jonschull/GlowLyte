@@ -86,6 +86,8 @@ def hideLabels():
     for sphere in oValues(spheres):
         sphere.label.visible=False
 
+def descendants(ID):
+    return spheres[ID].kidIDs
 
 if __name__== '__main__':
     graphString = '0:1 1:2 2:0' 
@@ -114,6 +116,6 @@ if __name__== '__main__':
     nodes = run(nodes, params)
     giveBirth('1:13')
     for i in range(5):
-        giveBirth(f'13:13.{i}')
-    nodes = run(nodes, params)
+        giveBirth(f'{13+i}:{13+i+1}')
+        nodes = run(nodes, params)
 

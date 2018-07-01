@@ -99,12 +99,12 @@ def run(nodes, params):
     force_strength= params['force_strength']
     max_velocity  = params['max_velocity']
     max_distance  = params['max_distance'] 
- 
+    d = 3 if is_3D else 2
+
+
     graphString = ' '.join(edgeIDs)
     nodeIDs = str.replace(graphString, ':', ' ').split(' ')
  
- 
-    d = 3 if is_3D else 2
     
     if len(nodes)==0:  #special case.  Otherwise, you must build nodes.
         for ID in nodeIDs:
