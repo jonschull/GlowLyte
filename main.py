@@ -69,12 +69,8 @@ def update(nodes): #function passed in to run(params)
 def giveBirth(eID):
     s,t = eID.split(':') 
     nodeIDs.append(t)
-    print('edgeIDs', edgeIDs)
-    
-    print('type edgeIDs', type(edgeIDs))
     edgeIDs.append(eID)
-    print('edgeIDs')
-    params['edgeIDs'] = edgeIDs
+    
     kid = newSphere(t,s)
     kid.pos = spheres[s].pos
     newCone(eID)
@@ -92,7 +88,7 @@ def hideLabels():
 
 
 if __name__== '__main__':
-    graphString = '0:1 1:2 2:3 3:4 4:0 4:5 4:6 4:7 7:8 8:9 9:10 10:11' 
+    graphString = '0:1 1:2 2:0' 
     edgeIDs = list(graphString.split(' '))  #' ' needed for RapydScript; list needed lest we get an array
     nodeIDs = list(set(str.replace(graphString, ':', ' ').split(' '))) # '0 1 2 3 4'.split(' ')
     ########   graphstring.replace won't work.        RapydScript quirk
@@ -117,5 +113,7 @@ if __name__== '__main__':
 
     nodes = run(nodes, params)
     giveBirth('1:13')
+    for i in range(5):
+        giveBirth(f'13:13.{i}')
     nodes = run(nodes, params)
 
