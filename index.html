@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- Using GlowScript locally, based on the work of Vesa Lappalainen vesal@jyu.fi -->
-        <title>GLOWLYTE</title>
+        <title>GlowLyte</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="jg/jg-style.css" />
         <link type="text/css" href="glowscript_libraries/jquery-ui.custom.css" rel="stylesheet" />
@@ -12,6 +12,9 @@
     </head>
     <body>
     <div>
+    <div><a href="https://glitch.com/edit/#!/ppgso?path=README.md:1:10">GlowLyte</a>:
+        <a href="http://GlowScript.org">GlowScript</a>
+          in Glitch (<a href="https://glitch.com/edit/#!/ppgso?path=index.html:15:43">edit</a>)</div>
         <script type="text/javascript" src="glowscript_libraries/Roboto_Medium_ttf_sans.js"></script>
         <script type="text/javascript" src="glowscript_libraries/NimbusRomNo9L_Med_otf_serif.js"></script>
         <script type="text/javascript" src="glowscript_libraries/jquery.min.js"></script>
@@ -42,10 +45,7 @@
 
 
 
-///////////
-/////////////   pyInstall
-//////////
-    <script type="text/javascript" src="rapydscript.js"></script>
+  <script type="text/javascript" src="rapydscript.js"></script>
   <script>   var compiler = RapydScript.create_embedded_compiler();
 
 ////////////////////////create global utilities in python///////////////////////
@@ -92,6 +92,36 @@ async function getSource(fileName){
 }
 </script>
 
-<script src="index.js"></script>
+<!-- <script src="index.js"></script></body></html>
+ -->
 
-</html>
+<script>
+// pyFiles that have been pyInstalled can be imported and made global here
+async function main(){
+  await pyInstall('utils.py') //includes filterImports used by getSource
+  await forGlobalEnvt()
+  await forGlowScript()
+  await runCode()
+}
+main()
+
+
+// Customize below
+
+function forGlobalEnvt(){window.eval(compiler.compile(`
+
+from utils import filterImports
+
+`,options = {'basedir':'__stdlib__','omit_baselib':true} )) ////////////////////////
+}
+
+
+
+//pyFiles defined here are turned into GlowScript source.  Then executed by runCode.
+async function forGlowScript(){
+  source=''
+  source += await getSource('cone.py')
+  source += await getSource('layerouter.py')
+  source += await getSource('main.py')
+}
+</script>
