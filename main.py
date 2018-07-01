@@ -6,7 +6,7 @@ V=vector
 cones={}
 spheres={}
 labels={}
-labelsVisible=False
+labelsVisible=1
 
 def randShift():
     return V(random()-0.5, random()-0.5, 0)
@@ -35,7 +35,7 @@ def newSphere(ID, parent=''):
 def newCone(eID):
     s,t = eID.split('.')
     cones[eID]= cone(pos=spheres[s].pos)
-    cones[eID].axis=spheres[s].pos - spheres[t].pos
+    cones[eID].axis=spheres[t].pos - spheres[s].pos
     cones[eID].color = spheres[s].color
     spheres[s].kidIDs.append(eID.split('.')[1])
     return cones[eID]
@@ -44,7 +44,7 @@ def newCone(eID):
 def cube_root(num):
     return num ** (1. / 3)
 
-def getRadius(sphere):
+def getRadius(sphere): 
     volume = len(sphere.kidIDs)
     return cube_root( ((1+volume) / pi)  * (3./ 4) )
 
@@ -82,9 +82,16 @@ def getIDs(edgeInts=[]):
     nodeIDs = list(set('.'.join(edgeIDs).split('.')))           # ['8', '7', '3'...
     return edgeIDs, nodeIDs
 
+def showLabels():
+    for sphere in oValues(spheres):
+        sphere.label.visible=True
+def hideLabels():
+    for sphere in oValues(spheres):
+        sphere.label.visible=False
+
 
 if __name__== '__main__':
-    edgeInts=[(1,2),(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6),(9,10),(9,11),(9,12)]
+    edgeInts=[(0,1),(1,2)]#,(2,3), (3,1), (3,4), (4,5), (4,6), (5,6), (6,7), (7,8),(8,9),(9,6),(9,10),(9,11),(9,12)]
     edgeIDs, nodeIDs = getIDs(edgeInts)
 
     
@@ -97,8 +104,8 @@ if __name__== '__main__':
         newCone(eID)
 
     # Generate nodes
-    params={'edgeIDs': edgeIDs,
-            'iterations'    : 40,
+    params={'edgeIDs': edgeIDs, 
+            'iterations'    : 150,
             'update'        : update,
             'is_3D'         : False,
             'force_strength': 5.0,
@@ -108,15 +115,7 @@ if __name__== '__main__':
 
     nodes={}
     run(nodes, params)
-    for i in range(3):
-        if i==2:
-            giveBirth('12.13')
-            giveBirth('12.14')
-            giveBirth('12.15')
-            giveBirth('12.16')
-            giveBirth('16.17')
-            giveBirth('17.18')
-            giveBirth('18.19')
-            giveBirth('19.20')
+    for i in range(2):
+            giveBirth(str(i) + '.' + str(i+1))
+            run(nodes, params)
 
-        run(nodes, params)

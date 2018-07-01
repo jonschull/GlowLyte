@@ -46,11 +46,17 @@ Log
           have birth update params[edgeIDs] and nodes
           and run(nodes, params) again and again
 
-  June 20
-
+  June 30
+    children are similar to parents in color
+    ?? how to keep github and glitch versions in sync?
 
 Other Notes:  Keep these true
   Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro
+  Live Server LIVE/QUIT Option-Ctrl L/Q
+
+  GlowLyte anomalies
+    if __name__=='__main__' is always true because my import simply amalgamates
+
 
   Notes for Bruce
     this tableau

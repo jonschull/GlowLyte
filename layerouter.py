@@ -5,7 +5,7 @@ Based on http://patrickfuller.github.io/jgraph/examples/ipython.html
 Generates network coordinates using a force-directed layout.
 tweaked for rapydsript compatibility and incremental layout 
 """
-from vpython import *
+from vpython import sqrt, random, scene
 
 def uniform(a,b):
     range=b-a
@@ -129,13 +129,12 @@ def run(nodes, params):
 
     return nodes
 
-
 def showNodes(nodes): #this is a proxy for updating
     for k, node in oItems(nodes):
         print(k, node['velocity']) #actually x,y,z
     print()
 
-if __name__== '__main__':
+if __name__== '__xxmain__': #useful for testing
     
         nodes={}
     
