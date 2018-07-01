@@ -101,6 +101,9 @@ def run(nodes, params):
     max_distance  = params['max_distance'] 
     d = 3 if is_3D else 2
 
+    if not edgeIDs:
+        return nodes
+
 
     graphString = ' '.join(edgeIDs)
     nodeIDs = str.replace(graphString, ':', ' ').split(' ')
@@ -110,6 +113,7 @@ def run(nodes, params):
         for ID in nodeIDs:
             nodes[ID]={'velocity': [0.0, 0.0, 0.0], 'force': [0.0, 0.0, 0.0]}  
 
+    
     for i in range(iterations):
         # Add in Coulomb-esque node-node repulsive forces
         for node1, node2 in combinations( oValues(nodes), 2):

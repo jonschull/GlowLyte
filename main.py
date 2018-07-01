@@ -24,25 +24,6 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
 
-def newSphere(ID, parentID=''):
-    if not parentID:
-        color = randVec()
-    else:
-        color = similar(spheres[parentID].color)
-        
-    embryo = sphere(color=color)
-    
-    embryo.ID = ID
-    embryo.ancestorIDs=[]
-    if parentID:
-        embryo.ancestorIDs.append(parentID)
-
-    embryo.kidIDs = []
-    embryo.label = label(text=ID, visible=labelsVisible)
-    
-    spheres[ID]=embryo
-    return spheres[ID]
-
 def newCone(eID):
     s,t = eID.split(':')
     cones[eID]= cone(pos=spheres[s].pos)
@@ -75,6 +56,27 @@ def update(nodes): #function passed in to run(params)
         cones[eID].axis= spheres[t].pos - spheres[s].pos
         cones[eID].radius= spheres[s].radius
 
+
+def newSphere(ID, parentID=''):
+    if not parentID:
+        color = randVec()
+    else:
+        color = similar(spheres[parentID].color)
+        
+    embryo = sphere(color=color)
+    
+    embryo.ID = ID
+    embryo.ancestorIDs=[]
+    if parentID:
+        embryo.ancestorIDs.append(parentID)
+
+    embryo.kidIDs = []
+    embryo.label = label(text=ID, visible=labelsVisible)
+    
+    spheres[ID]=embryo
+    return spheres[ID]
+
+
 def giveBirth(eID): #assumes the source sphere exists
     s,t = eID.split(':') 
     nodeIDs.append(t)
@@ -103,7 +105,7 @@ def descendants(ID):
     return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
 
 if __name__== '__main__':
-    graphString = '0:1 1:2 2:0' 
+    graphString = 'root:1'
     edgeIDs = list(graphString.split(' '))  #' ' needed for RapydScript; list needed lest we get an array
     nodeIDs = list(set(str.replace(graphString, ':', ' ').split(' '))) # '0 1 2 3 4'.split(' ')
     ########   graphstring.replace won't work.        RapydScript quirk
@@ -111,10 +113,16 @@ if __name__== '__main__':
     #make spheres and labels
     for ID in nodeIDs:
         newSphere(ID)
-
+    
+    
     #make cones after spheres exist
     for eID in edgeIDs:
         newCone(eID)
+
+
+    spheres['root'].visible=False
+    spheres['root'].label.visible=False
+    cones['root:1'].visible=False
 
     # Generate nodes
     params={'edgeIDs': edgeIDs,
@@ -130,7 +138,6 @@ if __name__== '__main__':
     giveBirth('1:13')
     for i in range(15):
         giveBirth(f'{13+i}:{13+i+1}')
-        print(descendants('2'))
         nodes = run(nodes, params)
         
     params['iterations']=100
