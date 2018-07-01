@@ -24,14 +24,23 @@ def upTune(v): #lighten color so one component =1
 def similar(c):
     return upTune(c + randVec())
 
-def newSphere(ID, parent=''):
-    if not parent:
+def newSphere(ID, parentID=''):
+    if not parentID:
         color = randVec()
     else:
-        color = similar(spheres[parent].color)
-    spheres[ID] = sphere(color=color)
-    spheres[ID].kidIDs = []
-    spheres[ID].label = label(text=ID, visible=labelsVisible)
+        color = similar(spheres[parentID].color)
+        
+    embryo = sphere(color=color)
+    
+    embryo.ID = ID
+    embryo.ancestorIDs=[]
+    if parentID:
+        embryo.ancestorIDs.append(parentID)
+
+    embryo.kidIDs = []
+    embryo.label = label(text=ID, visible=labelsVisible)
+    
+    spheres[ID]=embryo
     return spheres[ID]
 
 def newCone(eID):
@@ -47,7 +56,7 @@ def cube_root(num):
     return num ** (1. / 3)
 
 def getRadius(sphere):
-    volume = len(sphere.kidIDs)
+    volume = descendants(sphere.ID)
     return cube_root( ((1+volume) / pi)  * (3./ 4) )
 
 def updateSpheres(nodes):
@@ -66,13 +75,17 @@ def update(nodes): #function passed in to run(params)
         cones[eID].axis= spheres[t].pos - spheres[s].pos
         cones[eID].radius= spheres[s].radius
 
-def giveBirth(eID):
+def giveBirth(eID): #assumes the source sphere exists
     s,t = eID.split(':') 
     nodeIDs.append(t)
     edgeIDs.append(eID)
-    
+
     kid = newSphere(t,s)
     kid.pos = spheres[s].pos
+
+    parent = spheres[s]
+    kid.ancestorIDs = [s] + parent.ancestorIDs
+
     newCone(eID)
     nodes[t] ={}
     nodes[t]['velocity'] = nodes[s]['velocity']
@@ -87,7 +100,7 @@ def hideLabels():
         sphere.label.visible=False
 
 def descendants(ID):
-    return spheres[ID].kidIDs
+    return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
 
 if __name__== '__main__':
     graphString = '0:1 1:2 2:0' 
@@ -105,7 +118,7 @@ if __name__== '__main__':
 
     # Generate nodes
     params={'edgeIDs': edgeIDs,
-            'iterations'    : 50,
+            'iterations'    : 10,
             'update'        : update,
             'is_3D'         : False,
             'force_strength': 5.0,
@@ -115,7 +128,10 @@ if __name__== '__main__':
 
     nodes = run(nodes, params)
     giveBirth('1:13')
-    for i in range(5):
+    for i in range(15):
         giveBirth(f'{13+i}:{13+i+1}')
+        print(descendants('2'))
         nodes = run(nodes, params)
-
+        
+    params['iterations']=100
+    nodes = run(nodes, params)
