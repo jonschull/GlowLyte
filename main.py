@@ -106,20 +106,35 @@ def descendants(ID):
     return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
 
 
-def clickHandler(event):
-    hit=None
+def clickHandler(event): #works
+    """select and deslect
+        assumes objects have labels
+        assumes label.text for cones have ':'
+
+    """
     try:
-        hit = scene.mouse.pick.label.text
-    except Exception as e:
-       hit='no_hit'
-    if hit:
-        print(event.event, hit)
+        hitObj = scene.mouse.pick
+        if hitObj:
+            if ':' not in hitObj.label.text: #only do spheres
+                hitObj.emissive= not hitObj.emissive
+        else: #hit the canvas.  delect everything
+            allObjs = oValues(spheres) + oValues(cones)
+            for obj in allObjs:
+                obj.emissive = False
+    except:
+        traceback.print_exc()
+scene.bind('mousedown', clickHandler)
 
-scene.bind('click', clickHandler)
 
+def dragHandler(event): #works
+    allObjs = oValues(spheres) + oValues(cones)
+    selected=[obj for obj in allObjs if obj.emissive]
+    for obj in selected: 
+        obj.pos=scene.mouse.pos
+scene.bind('mousemove', dragHandler)
 
 if __name__== '__main__':
-    graphString = 'root:1'
+    graphString = 'root:1'  #'1:2 2:3 3:4'
     edgeIDs = list(graphString.split(' '))  #' ' needed for RapydScript; list needed lest we get an array
     nodeIDs = list(set(str.replace(graphString, ':', ' ').split(' '))) # '0 1 2 3 4'.split(' ')
     ########   graphstring.replace won't work.        RapydScript quirk
@@ -140,7 +155,7 @@ if __name__== '__main__':
 
     # Generate nodes
     params={'edgeIDs': edgeIDs,
-            'iterations'    : 10,
+            'iterations'    : 3,
             'update'        : update,
             'is_3D'         : False,
             'force_strength': 5.0,
@@ -150,7 +165,7 @@ if __name__== '__main__':
 
     nodes = run(nodes, params)
     giveBirth('1:13')
-    for i in range(15):
+    for i in range(2):
         giveBirth(f'{13+i}:{13+i+1}')
         nodes = run(nodes, params)
         
