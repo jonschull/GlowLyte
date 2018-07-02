@@ -6,7 +6,7 @@ V=vector
 cones={}
 spheres={}
 labels={}
-labelsVisible=1
+labelsVisible=0
 nodes={}
 
 
@@ -29,6 +29,7 @@ def newCone(eID):
     cones[eID]= cone(pos=spheres[s].pos)
     cones[eID].axis=spheres[t].pos - spheres[s].pos
     cones[eID].color = spheres[s].color
+    cones[eID].label = label(text = eID, visible=False)
     spheres[s].kidIDs.append(eID.split(':')[1])
     return cones[eID]
 
@@ -103,6 +104,20 @@ def hideLabels():
 
 def descendants(ID):
     return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
+
+
+
+def clickHandler(event):
+    hit=None
+    try:
+        hit = scene.mouse.pick.label.text
+    except Exception as e:
+       hit='no_hit'
+    if hit:
+        print(event.event, hit)
+
+scene.bind('click', clickHandler)
+
 
 if __name__== '__main__':
     graphString = 'root:1'
