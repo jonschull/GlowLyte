@@ -106,7 +106,6 @@ def descendants(ID):
     return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
 
 
-
 def clickHandler(event):
     hit=None
     try:
