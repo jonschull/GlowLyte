@@ -26,7 +26,7 @@ def similar(c):
 
 def newCone(eID):
     s,t = eID.split(':')
-    cones[eID]= cone(pos=spheres[s].pos)
+    cones[eID]= cone(pos=spheres[s].pos, opacity=0.5)
     cones[eID].axis=spheres[t].pos - spheres[s].pos
     cones[eID].color = spheres[s].color
     cones[eID].label = label(text = eID, visible=False)
@@ -64,7 +64,7 @@ def newSphere(ID, parentID=''):
     else:
         color = similar(spheres[parentID].color)
         
-    embryo = sphere(color=color)
+    embryo = sphere(color=color, opacity=0.5)
     
     embryo.ID = ID
     embryo.ancestorIDs=[]
