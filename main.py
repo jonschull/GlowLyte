@@ -106,6 +106,14 @@ def descendants(ID):
     return len([sphere for sphere in oValues(spheres) if ID in sphere.ancestorIDs])
 
 
+def selectedObjects():
+    allObjs = oValues(spheres) + oValues(cones)
+    return [obj for obj in allObjs if obj.emissive]
+
+def deselectAll():
+    for obj in selectedObjects():
+        obj.emissive=False
+
 def clickHandler(event): #works
     """select and deslect
         assumes objects have labels
@@ -113,23 +121,22 @@ def clickHandler(event): #works
 
     """
     try:
+        allObjs = oValues(spheres) + oValues(cones)
+
         hitObj = scene.mouse.pick
         if hitObj:
             if ':' not in hitObj.label.text: #only do spheres
+                deselectAll()
                 hitObj.emissive= not hitObj.emissive
-        else: #hit the canvas.  delect everything
-            allObjs = oValues(spheres) + oValues(cones)
-            for obj in allObjs:
-                obj.emissive = False
+        else: #hit the canvas.  deselect everything
+            deselectAll()
     except:
         traceback.print_exc()
 scene.bind('mousedown', clickHandler)
 
 
 def dragHandler(event): #works
-    allObjs = oValues(spheres) + oValues(cones)
-    selected=[obj for obj in allObjs if obj.emissive]
-    for obj in selected: 
+    for obj in selectedObjects():
         obj.pos=scene.mouse.pos
 scene.bind('mousemove', dragHandler)
 
