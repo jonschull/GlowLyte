@@ -19,7 +19,7 @@ Log
           glowscript	https://github.com/BruceSherwood/glowscript (push)
           origin	https://github.com/jonschull/GlowLyte.git (fetch)
           origin	https://github.com/jonschull/GlowLyte.git (push)
-
+        seems to be good now
 
       In Atom
         Publish
