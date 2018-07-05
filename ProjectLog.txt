@@ -9,7 +9,17 @@ Log
 
       In commandline
         git init in this directory
-        git remote add https://github.com/jonschull/Lyte
+        git remote add https://github.com/jonschull/GlowLyte
+        worked but then had to force Push
+        git remote -v is
+        git remote -v
+          GlowLyte	https://github.com/jonschull (fetch)
+          GlowLyte	https://github.com/jonschull (push)
+          glowscript	https://github.com/BruceSherwood/glowscript (fetch)
+          glowscript	https://github.com/BruceSherwood/glowscript (push)
+          origin	https://github.com/jonschull/GlowLyte.git (fetch)
+          origin	https://github.com/jonschull/GlowLyte.git (push)
+
 
       In Atom
         Publish
