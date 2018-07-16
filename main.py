@@ -114,6 +114,11 @@ def deselectAll():
     for obj in selectedObjects():
         obj.emissive=False
 
+def mouseup():
+    deselectAll()
+scene.bind('mouseup', mouseup)
+
+
 def clickHandler(event): #works
     """select and deslect
         assumes objects have labels
@@ -176,5 +181,5 @@ if __name__== '__main__':
         giveBirth(f'{13+i}:{13+i+1}')
         nodes = run(nodes, params)
         
-    params['iterations']=100
+    params['iterations']=400
     nodes = run(nodes, params)

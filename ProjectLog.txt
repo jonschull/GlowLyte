@@ -1,7 +1,7 @@
 Log
   june 23
     Github
-      To initialize the PPGSO branch and eliminate Atom's fixation on the entire core demos treeUsing
+      To initialize the PPGSO branch and eliminate Atom's fixation on the entire core demos tree
       I did something like this
 
       In Atom
@@ -59,6 +59,10 @@ Log
   June 30
     children are similar to parents in color
     ?? how to keep github and glitch versions in sync?
+
+  July 16 (picking up in Brest, Fr.)  main.py includes beginning drag code
+
+
 
 Other Notes:  Keep these true
   Folding Text in Atom Alt Cmd [ and ]; also ^K and ^L via keyboard maestro
